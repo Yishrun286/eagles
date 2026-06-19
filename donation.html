@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donate | Eagles FC Academy Ethiopia</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦅</text></svg>">
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav id="navbar" class="scrolled">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">🦅</div>
+        <div class="nav-logo-text"><div class="main">Eagles FC</div><div class="sub">Football Academy</div></div>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="programs.html">Programs</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="shop.html" class="active">Kit Shop</a>
+        <a href="contact.html">Contact</a>
+          <a href="registration.html">registration</a>
+        <a href="donation.html" class="nav-cta active">Donate</a>
+      </div>
+      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobile-nav">
+  <a href="index.html">🏠 Home</a>
+  <a href="about.html">📖 About Us</a>
+  <a href="programs.html">⚽ Programs</a>
+  <a href="gallery.html">📷 Gallery</a>
+  <a href="registration.html">📝 Register</a>
+  <a href="donation.html">💛 Donate</a>
+  <a href="contact.html">📞 Contact</a>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-content container">
+    <div class="page-hero-tag">💛 Support Ethiopian Football</div>
+    <h1>Donate to <span>Eagles FC</span></h1>
+    <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <span>Donate</span></div>
+  </div>
+</section>
+
+<!-- IMPACT INTRO -->
+<section style="background:var(--off-black); padding:70px 0;">
+  <div class="container" style="text-align:center; max-width:750px; margin:0 auto;">
+    <div class="section-tag">Your Impact</div>
+    <h2 style="font-family:var(--font-display);font-size:clamp(1.8rem,3vw,2.8rem);font-weight:700;text-transform:uppercase;color:var(--white);margin-bottom:16px;">Every Birr <span class="text-gold">Changes a Life</span></h2>
+    <p style="color:var(--text-gray);line-height:1.8;font-size:1.05rem;">Your generous donation directly funds football equipment, pitch maintenance, coaching education, player nutrition, and academic support for hundreds of talented Ethiopian youth who cannot afford these opportunities on their own. You are not just funding football — you are investing in the future of Ethiopia.</p>
+  </div>
+</section>
+
+<!-- MAIN DONATION SECTION -->
+<section class="donation-section section-pad">
+  <div class="container">
+    <div class="donation-grid">
+
+      <!-- LEFT: Donation Form -->
+      <div class="reveal-left">
+        <div class="section-tag">Make a Donation</div>
+        <h2 style="font-family:var(--font-display);font-size:clamp(1.6rem,2.5vw,2.2rem);font-weight:700;text-transform:uppercase;color:var(--white);margin-bottom:8px;">Support Ethiopian <span class="text-gold">Youth Football</span></h2>
+        <p style="color:var(--text-gray);margin-bottom:24px;line-height:1.7;">Choose an amount below or enter your own. All donations go directly to player development.</p>
+
+        <!-- Preset Amounts -->
+        <div class="donation-amounts">
+          <button class="amount-btn" data-amount="100">ETB 100</button>
+          <button class="amount-btn active" data-amount="250">ETB250</button>
+          <button class="amount-btn" data-amount="500">ETB 500</button>
+          <button class="amount-btn" data-amount="1000">ETB 1,000</button>
+          <button class="amount-btn" data-amount="2500">ETB 2,500</button>
+          <button class="amount-btn" data-amount="5000">ETB 5,000</button>
+        </div>
+
+        <!-- Custom Amount -->
+        <div class="custom-amount form-group">
+          <label style="font-family:var(--font-cond);font-size:0.82rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-gray);">Or Enter Custom Amount (ETB)</label>
+          <input type="number" id="custom-amount" class="form-control" placeholder="Enter amount in Birr" min="10" style="padding-left:60px;">
+        </div>
+
+        <!-- Fundraising Progress -->
+       
+        <!-- Donation Frequency -->
+        <div style="margin-bottom:24px;">
+          <p style="font-family:var(--font-cond);font-size:0.82rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-gray);margin-bottom:12px;">Donation Frequency</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--white);font-size:0.9rem;padding:10px 18px;background:rgba(201,168,76,0.12);border:1px solid var(--gold);border-radius:var(--radius);">
+              <input type="radio" name="frequency" value="once" checked style="accent-color:var(--gold);"> One Time
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--white);font-size:0.9rem;padding:10px 18px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);">
+              <input type="radio" name="frequency" value="monthly" style="accent-color:var(--gold);"> Monthly
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--white);font-size:0.9rem;padding:10px 18px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);">
+              <input type="radio" name="frequency" value="yearly" style="accent-color:var(--gold);"> Yearly
+            </label>
+          </div>
+        </div>
+
+        <!-- Donate via TeleBirr Button -->
+        <div style="margin-bottom:16px;">
+          <a href="#telebirr-section" class="btn btn-gold" style="width:100%;justify-content:center;font-size:1rem;padding:16px;">
+            💛 Donate via TeleBirr
+          </a>
+        </div>
+        <div>
+          <a href="#bank-section" class="btn btn-outline" style="width:100%;justify-content:center;font-size:1rem;padding:16px;">
+            🏦 Donate via Bank Transfer 
+          </a>
+        </div>
+
+        <!-- What your money does -->
+        <div style="margin-top:32px;background:var(--dark-gray);border-radius:var(--radius-lg);padding:24px;border:1px solid rgba(255,255,255,0.05);">
+          <h4 style="font-family:var(--font-cond);font-size:0.85rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">💡 What Your Donation Buys</h4>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);">
+              <span style="color:var(--text-gray);font-size:0.88rem;">⚽ Football & training cones (set)</span>
+              <span style="color:var(--gold);font-family:var(--font-cond);font-weight:700;">ETB 250</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);">
+              <span style="color:var(--text-gray);font-size:0.88rem;">👕 Full kit for 1 player (1 season)</span>
+              <span style="color:var(--gold);font-family:var(--font-cond);font-weight:700;">ETB 500</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);">
+              <span style="color:var(--text-gray);font-size:0.88rem;">🥗 Monthly nutrition support (1 player)</span>
+              <span style="color:var(--gold);font-family:var(--font-cond);font-weight:700;">ETB 1,000</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);">
+              <span style="color:var(--text-gray);font-size:0.88rem;">📚 School fees + academy (1 term)</span>
+              <span style="color:var(--gold);font-family:var(--font-cond);font-weight:700;">ETB 2,500</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="color:var(--text-gray);font-size:0.88rem;">🏟 Pitch maintenance (1 month)</span>
+              <span style="color:var(--gold);font-family:var(--font-cond);font-weight:700;">ETB 5,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: TeleBirr QR + Bank Details -->
+      <div>
+
+        <!-- TeleBirr QR Section -->
+        <div class="qr-card reveal-right" id="telebirr-section">
+          <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:20px;padding:6px 16px;margin-bottom:16px;">
+            <span style="font-size:1.1rem;">📱</span>
+            <span style="font-family:var(--font-cond);font-size:0.8rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);">TeleBirr Payment</span>
+          </div>
+          <h3>Scan & Pay with TeleBirr</h3>
+          <p class="sub">Ethiopia's leading mobile payment platform. Scan the QR code with your TeleBirr app to donate instantly.</p>
+
+          <!-- QR Code Placeholder -->
+          <div class="qr-code-wrap">
+            <!-- ✏️ REPLACE THIS IMAGE with your real TeleBirr QR code image -->
+             <img src="images/qr jo.jpg" alt="TeleBirr QR Code" class="qr-code-img"> --> 
+           
+          </div>
+
+          <!-- How to use TeleBirr -->
+          <div style="background:rgba(0,0,0,0.2);border-radius:var(--radius);padding:14px;margin-bottom:16px;text-align:left;">
+            <p style="font-family:var(--font-cond);font-size:0.78rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">How to Pay:</p>
+            <ol style="color:var(--text-gray);font-size:0.85rem;line-height:1.8;padding-left:16px;">
+              <li>Open your <strong style="color:var(--white);">TeleBirr</strong> app</li>
+              <li>Tap <strong style="color:var(--white);">Scan QR Code</strong></li>
+              <li>Scan the code above</li>
+              <li>Enter your donation amount</li>
+              <li>Confirm with your PIN</li>
+            </ol>
+          </div>
+
+          <p style="font-family:var(--font-cond);font-size:0.8rem;font-weight:700;letter-spacing:0.1em;color:var(--text-gray);margin-bottom:4px;">OR SEND DIRECTLY TO:</p>
+          <div class="qr-phone">📱 +251 930803396</div>  
+          <p class="qr-note">TeleBirr Account: <strong style="color:var(--white);">Eagles FC Academy</strong></p>
+          <p class="qr-note" style="margin-top:4px; font-size:0.75rem; color:rgba(160,176,160,0.6);">✏️ Replace QR image with your real TeleBirr QR from your TeleBirr merchant account</p>
+        </div>
+
+        <!-- Bank Transfer -->
+        <div class="bank-card reveal" id="bank-section">
+          <h4>🏦 Bank Transfer Details</h4>
+          <div class="bank-row"><span class="lbl">Bank Name</span><span class="val">Commercial Bank of Ethiopia</span></div>
+          <div class="bank-row"><span class="lbl">Account Name</span><span class="val">yohannes legesse</span></div>
+          <div class="bank-row"><span class="lbl">Account Number</span><span class="val">1000 368538454</span></div>
+  
+        </div>
+
+        <!-- hibret  Bank -->
+        <div class="bank-card reveal" style="margin-top:12px;">
+          <h4>🏦 Bank of hibret (Alternative)</h4>
+          <div class="bank-row"><span class="lbl">Account Name</span><span class="val">yohannes legesse</span></div>
+          <div class="bank-row"><span class="lbl">Account Number</span><span class="val">4390411541886016</span></div>
+          
+        </div>
+
+        <!-- Sponsorship CTA -->
+        <div style="margin-top:20px;background:linear-gradient(135deg,var(--dark-green),var(--off-black));border-radius:var(--radius-lg);padding:24px;border:1px solid rgba(201,168,76,0.2);">
+          <h4 style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">🤝 Corporate Sponsorship</h4>
+          <p style="color:var(--text-gray);font-size:0.88rem;line-height:1.7;margin-bottom:16px;">For corporate partnerships, jersey sponsorships, or large donations, contact our executive team directly. We offer full branding packages and official sponsorship agreements.</p>
+          <a href="contact.html" class="btn btn-gold" style="width:100%;justify-content:center;">Contact for Sponsorship</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT NUMBERS -->
+
+
+<!-- THANK YOU SECTION -->
+<section style="background:var(--off-black);padding:80px 0;text-align:center;">
+  <div class="container" style="max-width:700px;margin:0 auto;">
+    <div style="font-size:3rem;margin-bottom:16px;">🙏</div>
+    <div class="section-tag">Thank You</div>
+    <h2 style="font-family:var(--font-display);font-size:clamp(2rem,3.5vw,2.8rem);font-weight:700;text-transform:uppercase;color:var(--white);margin:12px 0;">From the <span class="text-gold">Eagles Family</span></h2>
+    <p style="color:var(--text-gray);line-height:1.9;font-size:1rem;margin-bottom:16px;">"Every child who trains at Eagles FC Academy does so because someone believed in the power of football to change lives. Your donation is not just money — it is hope, opportunity, and a future for Ethiopia's youth. On behalf of every player, coach, and family at Eagles FC, we say: <strong style="color:var(--gold);">Galatoomi. Ameseginalehu. Thank you.</strong>"</p>
+    <p style="font-family:var(--font-cond);font-size:0.9rem;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;">— Bekele Tadesse, Founder & Head Coach</p>
+    <div style="margin-top:32px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+      <a href="registration.html" class="btn btn-gold">📝 Register a Player</a>
+      <a href="contact.html" class="btn btn-outline">📞 Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo-text">🦅 Eagles FC Academy</div>
+        <div class="logo-sub">Ethiopia's Premier Youth Football Academy</div>
+        <p>Developing Ethiopia's football talent since 2015. Based in adiss abeba,</p>
+        <div class="footer-social">
+           <a href="https://www.facebook.com/share/1GRrwhnGoj/" class="social-contact-btn">f Facebook</a>
+            <a href="https://t.me/+DZHYHpE2W2NjYzg0" class="social-contact-btn">in telegram</a>
+            <a href="https://www.youtube.com/@niser2017" class="social-contact-btn">▶ YouTube</a>
+            <a href="http://tiktok.com/@eagels.fotball.et" class="social-contact-btn">♪ TikTok</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li><li><a href="about.html">About Us</a></li>
+          <li><a href="programs.html">Programs</a></li>
+          <li><a href="gallery.html">Gallery</a></li><li><a href="registration.html">Register</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Programs</h4>
+        <ul>
+          <li><a href="programs.html">Under 10</a></li><li><a href="programs.html">Under 13</a></li>
+          <li><a href="programs.html">Under 15 </a></li><li><a href="programs.html">Senior Team</a></li>
+          <li><a href="programs.html">Goalkeeper Training</a></li><li><a href="programs.html">Fitness Camp</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact Us</h4>
+        <div class="footer-contact">
+          <div class="contact-item"><span class="icon">📍</span><span>around gelan, Ethiopia</span></div>
+          <div class="contact-item"><span class="icon">📞</span><span>+251 930803396</span></div>
+          <div class="contact-item"><span class="icon">📧</span><span>info@eaglesfcacademy.et</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 <span>Eagles Football Club Academy</span>. All Rights Reserved. 🇪🇹</p>
+      <p>Designed with ❤️ for Ethiopian Football</p>
+    </div>
+  </div>
+</footer>
+<button id="back-to-top" title="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

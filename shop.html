@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kit Shop | Eagles FC Academy Ethiopia</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦅</text></svg>">
+  <style>
+    /* ══════════════════════════════════════
+       KIT SHOP PAGE – SCOPED STYLES
+    ══════════════════════════════════════ */
+
+    /* ── Kit cards grid ── */
+    .kits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    @media (max-width: 900px) { .kits-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 560px) { .kits-grid { grid-template-columns: 1fr; } }
+
+    .kit-card {
+      background: var(--off-black);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: var(--transition);
+      position: relative;
+    }
+    .kit-card:hover {
+      border-color: rgba(201,168,76,0.4);
+      transform: translateY(-6px);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+    }
+
+    /* Badge — NEW / POPULAR */
+    .kit-badge {
+      position: absolute;
+      top: 14px; left: 14px;
+      font-family: var(--font-cond);
+      font-size: 0.7rem; font-weight: 800;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 3px;
+      z-index: 3;
+    }
+    .kit-badge.popular  { background: var(--gold); color: var(--black); }
+    .kit-badge.new      { background: var(--light-green); color: var(--white); }
+    .kit-badge.limited  { background: #c0392b; color: var(--white); }
+
+    /* Kit image area */
+    .kit-img-wrap {
+      position: relative;
+      height: 300px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1a1a3a, #0a0a1a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .kit-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .kit-card:hover .kit-img-wrap img { transform: scale(1.05); }
+
+    /* Quick view overlay */
+    .kit-hover-overlay {
+      position: absolute; inset: 0;
+      background: rgba(10,46,10,0.7);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: var(--transition);
+    }
+    .kit-card:hover .kit-hover-overlay { opacity: 1; }
+    .kit-quick-view {
+      font-family: var(--font-cond); font-size: 0.88rem;
+      font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--black); background: var(--gold);
+      padding: 10px 24px; border-radius: var(--radius);
+      border: none; cursor: pointer; transition: var(--transition);
+    }
+    .kit-quick-view:hover { background: var(--gold-light); transform: scale(1.05); }
+
+    /* Kit body */
+    .kit-body { padding: 22px; }
+    .kit-number {
+      font-family: var(--font-cond); font-size: 0.72rem;
+      font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 4px;
+    }
+    .kit-name {
+      font-family: var(--font-display); font-size: 1.2rem;
+      font-weight: 700; text-transform: uppercase;
+      color: var(--white); margin-bottom: 6px; line-height: 1.2;
+    }
+    .kit-desc { color: var(--text-gray); font-size: 0.85rem; line-height: 1.65; margin-bottom: 16px; }
+
+    /* Color dots */
+    .kit-colors { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+    .kit-colors span {
+      font-family: var(--font-cond); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-gray);
+      margin-right: 4px;
+    }
+    .color-dot {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2); cursor: pointer;
+      transition: var(--transition);
+    }
+    .color-dot:hover, .color-dot.active { border-color: var(--gold); transform: scale(1.2); }
+
+    /* Sizes */
+    .kit-sizes { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+    .size-btn {
+      font-family: var(--font-cond); font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      padding: 5px 11px; border-radius: 4px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-gray); cursor: pointer; transition: var(--transition);
+    }
+    .size-btn:hover, .size-btn.active {
+      background: rgba(201,168,76,0.15);
+      border-color: var(--gold); color: var(--gold);
+    }
+    .size-btn.sold-out {
+      opacity: 0.3; cursor: not-allowed;
+      text-decoration: line-through;
+    }
+
+    /* Price row */
+    .kit-price-row {
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 10px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .kit-price {
+      font-family: var(--font-display); font-size: 1.5rem;
+      font-weight: 700; color: var(--gold);
+    }
+    .kit-price .currency {
+      font-family: var(--font-cond); font-size: 0.85rem;
+      font-weight: 700; letter-spacing: 0.05em;
+      color: var(--text-gray); margin-right: 3px;
+    }
+    .kit-price .old-price {
+      font-size: 0.88rem; color: var(--text-gray);
+      text-decoration: line-through; margin-left: 8px;
+      font-weight: 400;
+    }
+
+    .btn-order {
+      font-family: var(--font-cond); font-size: 0.82rem;
+      font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 11px 20px; border-radius: var(--radius);
+      background: var(--gold); color: var(--black);
+      border: none; cursor: pointer; transition: var(--transition);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-order:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: var(--shadow-gold); }
+
+    /* ── KIT DETAIL MODAL ── */
+    #kit-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.88);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    #kit-modal.open { display: flex; }
+    .modal-box {
+      background: var(--off-black);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: var(--radius-lg);
+      max-width: 900px; width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.7);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    @media (max-width: 700px) { .modal-box { grid-template-columns: 1fr; } }
+    .modal-img-side {
+      background: linear-gradient(135deg, #1a1a3a, #0a0a1a);
+      display: flex; align-items: center; justify-content: center;
+      min-height: 340px;
+      overflow: hidden;
+    }
+    .modal-img-side img { width: 100%; height: 100%; object-fit: cover; }
+    .modal-body-side { padding: 36px; display: flex; flex-direction: column; }
+    .modal-close {
+      position: absolute; top: 14px; right: 18px;
+      font-size: 1.6rem; color: var(--text-gray);
+      cursor: pointer; background: none; border: none;
+      line-height: 1; transition: var(--transition); z-index: 10;
+    }
+    .modal-close:hover { color: var(--gold); }
+    .modal-kit-num {
+      font-family: var(--font-cond); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px;
+    }
+    .modal-kit-name {
+      font-family: var(--font-display); font-size: 1.7rem; font-weight: 700;
+      text-transform: uppercase; color: var(--white); line-height: 1.1; margin-bottom: 14px;
+    }
+    .modal-kit-desc { color: var(--text-gray); font-size: 0.9rem; line-height: 1.75; margin-bottom: 20px; }
+    .modal-price {
+      font-family: var(--font-display); font-size: 2rem; font-weight: 700;
+      color: var(--gold); margin-bottom: 20px;
+    }
+    .modal-section-label {
+      font-family: var(--font-cond); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-gray); margin-bottom: 8px;
+    }
+    .modal-sizes { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .modal-size-btn {
+      font-family: var(--font-cond); font-size: 0.82rem; font-weight: 700;
+      padding: 8px 16px; border-radius: var(--radius);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-gray); cursor: pointer; transition: var(--transition);
+    }
+    .modal-size-btn:hover, .modal-size-btn.active {
+      background: rgba(201,168,76,0.15); border-color: var(--gold); color: var(--gold);
+    }
+    .modal-qty {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+    }
+    .qty-btn {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius); color: var(--white);
+      font-size: 1.2rem; cursor: pointer; transition: var(--transition);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .qty-btn:hover { background: var(--gold); color: var(--black); border-color: var(--gold); }
+    .qty-num {
+      font-family: var(--font-display); font-size: 1.2rem; font-weight: 700;
+      color: var(--white); min-width: 32px; text-align: center;
+    }
+    .modal-order-btn {
+      width: 100%; padding: 15px; font-size: 1rem; justify-content: center;
+    }
+    .modal-features { margin-top: 20px; display: flex; flex-direction: column; gap: 8px; }
+    .modal-feat {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.85rem; color: var(--text-gray);
+    }
+    .modal-feat::before { content: '✓'; color: var(--gold); font-weight: 700; font-size: 0.85rem; }
+
+    /* ── Order Modal (payment) ── */
+    #order-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 10000;
+      display: none; align-items: center; justify-content: center;
+      padding: 20px; overflow-y: auto;
+    }
+    #order-modal.open { display: flex; }
+    .order-box {
+  background: var(--off-black);
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: var(--radius-lg);
+  max-width: 640px; width: 100%;
+  padding: 40px;
+  position: relative;  /* ← አስቀድሞ አለ ✅ */
+  max-height: 90vh; overflow-y: auto;
+}
+    .order-box h2 {
+      font-family: var(--font-display); font-size: 1.5rem; font-weight: 700;
+      text-transform: uppercase; color: var(--white); margin-bottom: 6px;
+    }
+    .order-box p.order-sub {
+      color: var(--text-gray); font-size: 0.88rem; margin-bottom: 24px; line-height: 1.6;
+      padding-bottom: 20px; border-bottom: 1px solid rgba(201,168,76,0.1);
+    }
+    .order-summary {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: var(--radius); padding: 16px; margin-bottom: 24px;
+    }
+    .order-summary-title {
+      font-family: var(--font-cond); font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px;
+    }
+    .order-summary-row {
+      display: flex; justify-content: space-between;
+      font-size: 0.88rem; padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .order-summary-row:last-child { border-bottom: none; }
+    .order-summary-row .lbl { color: var(--text-gray); }
+    .order-summary-row .val { color: var(--white); font-weight: 600; }
+    .order-summary-row.total .lbl,
+    .order-summary-row.total .val { color: var(--gold); font-family: var(--font-display); font-size: 1rem; font-weight: 700; }
+
+    /* Payment tabs */
+    .pay-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    .pay-tab {
+      flex: 1; padding: 12px; text-align: center;
+      font-family: var(--font-cond); font-size: 0.85rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius); color: var(--text-gray);
+      cursor: pointer; transition: var(--transition);
+    }
+    .pay-tab.active { background: rgba(201,168,76,0.12); border-color: var(--gold); color: var(--gold); }
+    .pay-tab:hover  { border-color: var(--gold); color: var(--gold); }
+
+    .pay-panel { display: none; }
+    .pay-panel.active { display: block; }
+
+    /* TeleBirr panel */
+    .telebirr-panel { text-align: center; padding: 20px 0; }
+    .telebirr-qr-wrap {
+      background: var(--white); border-radius: var(--radius);
+      padding: 16px; display: inline-block;
+      border: 4px solid var(--gold); margin-bottom: 16px;
+    }
+    .telebirr-steps {
+      background: rgba(0,0,0,0.25); border-radius: var(--radius);
+      padding: 16px; text-align: left; margin-top: 16px;
+    }
+    .telebirr-steps ol { color: var(--text-gray); font-size: 0.85rem; line-height: 1.8; padding-left: 18px; }
+    .telebirr-steps ol li strong { color: var(--white); }
+    .telebirr-phone {
+      font-family: var(--font-display); font-size: 1.6rem;
+      font-weight: 700; color: var(--gold); margin: 12px 0 4px;
+    }
+    .telebirr-name { font-size: 0.82rem; color: var(--text-gray); }
+
+    /* Bank panel */
+    .bank-row {
+      display: flex; justify-content: space-between;
+      padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.88rem;
+    }
+    .bank-row:last-child { border-bottom: none; }
+    .bank-row .b-lbl { color: var(--text-gray); }
+    .bank-row .b-val { color: var(--white); font-weight: 600; font-family: var(--font-cond); }
+
+    /* Order form fields */
+    .of-group { margin-bottom: 16px; }
+    .of-group label {
+      display: block; font-family: var(--font-cond); font-size: 0.72rem;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em;
+      color: var(--text-gray); margin-bottom: 7px;
+    }
+    .of-group label span { color: var(--gold); }
+    .of-group input, .of-group select, .of-group textarea {
+      width: 100%; background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius); padding: 12px 14px;
+      color: var(--white); font-family: var(--font-body); font-size: 0.9rem;
+      transition: var(--transition); outline: none; box-sizing: border-box;
+    }
+    .of-group input:focus, .of-group select:focus {
+      border-color: var(--gold); background: rgba(201,168,76,0.04);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+    }
+    .of-group input::placeholder { color: rgba(255,255,255,0.2); }
+    .of-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 480px) { .of-row { grid-template-columns: 1fr; } }
+
+    .order-confirm-btn {
+      width: 100%; padding: 15px; font-size: 1rem;
+      justify-content: center; margin-top: 8px;
+    }
+    .order-success {
+  display: none;
+  text-align: center;
+  padding: 24px 0;
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  background: var(--off-black);
+  min-height: 100%;
+  z-index: 999;
+  padding: 40px;
+  border-radius: var(--radius-lg);
+}
+    .order-success .ok-icon { font-size: 3.5rem; margin-bottom: 14px; }
+    .order-success h3 {
+      font-family: var(--font-display); font-size: 1.4rem; font-weight: 700;
+      text-transform: uppercase; color: var(--light-green); margin-bottom: 10px;
+    }
+    .order-success p { color: var(--text-gray); line-height: 1.75; font-size: 0.9rem; }
+    .order-success .ref {
+      font-family: var(--font-display); font-size: 1.1rem; font-weight: 700;
+      color: var(--gold); margin: 12px 0;
+    }
+
+    /* Why buy strip */
+    .why-buy-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+    @media (max-width: 768px) { .why-buy-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 420px) { .why-buy-grid { grid-template-columns: 1fr; } }
+    .why-buy-card {
+      background: var(--off-black); border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius-lg); padding: 24px; text-align: center;
+      transition: var(--transition);
+    }
+    .why-buy-card:hover { border-color: rgba(201,168,76,0.25); transform: translateY(-4px); }
+    .why-buy-icon { font-size: 2.2rem; margin-bottom: 12px; }
+    .why-buy-card h4 {
+      font-family: var(--font-display); font-size: 0.9rem; font-weight: 700;
+      text-transform: uppercase; color: var(--white); margin-bottom: 6px;
+    }
+    .why-buy-card p { color: var(--text-gray); font-size: 0.82rem; line-height: 1.65; margin: 0; }
+
+    /* Size guide table */
+    .size-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .size-table th {
+      font-family: var(--font-cond); font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--gold); background: rgba(201,168,76,0.08);
+      padding: 10px 14px; text-align: left;
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+    .size-table td {
+      padding: 10px 14px; color: var(--text-gray);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .size-table tr:hover td { background: rgba(255,255,255,0.02); color: var(--white); }
+
+
+  </style>
+</head>
+<body>
+
+<!-- ══ LOADING ══ -->
+<div id="loading-screen">
+  <div class="loader-logo">🦅 EAGLES FC</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+</div>
+
+<!-- ══ NAVBAR ══ -->
+<nav id="navbar" class="scrolled">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">🦅</div>
+        <div class="nav-logo-text">
+          <div class="main">Eagles FC</div>
+          <div class="sub">Football Academy</div>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="programs.html">Programs</a>
+         <a href="registration.html">registration</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="shop.html" class="active">Kit Shop</a>
+        <a href="contact.html">Contact</a>
+        <a href="donation.html" class="nav-cta">Donate</a>
+      </div>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobile-nav">
+  <a href="index.html">🏠 Home</a>
+  <a href="about.html">📖 About Us</a>
+  <a href="programs.html">⚽ Programs</a>
+  <a href="gallery.html">📷 Gallery</a>
+  <a href="shop.html">👕 Kit Shop</a>
+  <a href="registration.html">📝 Register</a>
+  <a href="donation.html">💛 Donate</a>
+  <a href="contact.html">📞 Contact</a>
+</div>
+
+<!-- ══ PAGE HERO ══ -->
+<section class="page-hero">
+  <div class="page-hero-content container">
+    <div class="page-hero-tag">👕 Official Eagles FC Kits</div>
+    <h1>Kit <span>Shop</span></h1>
+    <div class="breadcrumb">
+      <a href="index.html">Home</a> <span>›</span> <span>Kit Shop</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ INTRO STRIP ══ -->
+<section style="background:var(--dark-green);padding:40px 0;border-bottom:1px solid rgba(201,168,76,0.15);">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+      <div>
+        <div class="section-tag" style="margin-bottom:8px;">Official Academy Kits</div>
+        <h2 style="font-family:var(--font-display);font-size:clamp(1.5rem,2.5vw,2rem);font-weight:700;text-transform:uppercase;color:var(--white);line-height:1.1;">
+          Wear the <span class="text-gold">Eagles Badge</span> with Pride
+        </h2>
+      </div>
+      <div style="display:flex;gap:24px;flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;color:var(--gold);">3</div>
+          <div style="font-family:var(--font-cond);font-size:0.72rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-gray);">Kit Designs</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;color:var(--gold);">5</div>
+          <div style="font-family:var(--font-cond);font-size:0.72rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-gray);">Sizes Available</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;color:var(--gold);">48h</div>
+          <div style="font-family:var(--font-cond);font-size:0.72rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-gray);">Order Processing</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ KIT CARDS ══ -->
+<section class="section-pad" style="background:var(--black);">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">2025 Collection</div>
+      <h2 class="section-title">Official <span>Academy Kits</span></h2>
+      <div class="section-divider"></div>
+      <p class="section-sub">All kits are official Eagles FC Academy designs. Full kit includes jersey + shorts. Custom name & number printing available on request.</p>
+    </div>
+
+    <div class="kits-grid">
+
+      <!-- KIT 01 – Maroon & Gold (image 3) -->
+      <div class="kit-card reveal">
+        <div class="kit-badge popular">⭐ Most Popular</div>
+        <div class="kit-img-wrap">
+          <!-- Replace src with your actual kit image path e.g. images/kit-01.jpg -->
+          <img src="kit1.png"
+               alt="Eagles FC Kit 01 – Maroon & Gold"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--text-gray);">
+            <span style="font-size:4rem;">👕</span>
+            <span style="font-family:var(--font-cond);font-size:0.85rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Kit 01 Preview</span>
+          </div>
+          <div class="kit-hover-overlay">
+            <button class="kit-quick-view" onclick="openKitModal(1)">Quick View</button>
+          </div>
+        </div>
+        <div class="kit-body">
+          <div class="kit-number">Kit 01 · Home</div>
+          <h3 class="kit-name">Maroon & Gold Eagle</h3>
+          <p class="kit-desc">The iconic home kit featuring the Eagles crest in striking maroon and gold. Eagle silhouette chest design. Full kit: jersey + shorts.</p>
+          
+         
+          
+          <div class="kit-price-row">        kit preview
+            <div class="kit-price">
+              <span class="currency">ETB</span>1,500
+              <span class="old-price">ETB 1,800</span>
+            </div>
+            <button class="btn-order" onclick="openOrderModal('Eagles FC Kit 01 – Maroon & Gold Home Kit','1,800')">🛒 Order</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- KIT 02 – Blue (image 2) -->
+      <div class="kit-card reveal">
+        <div class="kit-badge new">🆕 New Arrival</div>
+        <div class="kit-img-wrap">
+          <img src="kit2.png"
+               alt="Eagles FC Kit 02 – Royal Blue"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--text-gray);">
+            <span style="font-size:4rem;">👕</span>
+            <span style="font-family:var(--font-cond);font-size:0.85rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Kit 02 Preview</span>
+          </div>
+          <div class="kit-hover-overlay">
+            <button class="kit-quick-view" onclick="openKitModal(2)">Quick View</button>
+          </div>
+        </div>
+        <div class="kit-body">
+          <div class="kit-number">Kit 02 · Away</div>
+          <h3 class="kit-name">Royal Blue Striker</h3>
+          <p class="kit-desc">The bold away kit in royal blue with flowing feather patterns on the chest. Breathable premium fabric. Full kit: jersey + shorts.</p>
+         
+         
+          <div class="kit-price-row">
+            <div class="kit-price">
+              <span class="currency">ETB</span>1,500
+            </div>
+            <button class="btn-order" onclick="openOrderModal('Eagles FC Kit 02 – Royal Blue Away Kit','1,900')">🛒 Order</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- KIT 03 – Dark Navy (image 1) -->
+      <div class="kit-card reveal">
+        <div class="kit-badge limited">🔥 Limited Stock</div>
+        <div class="kit-img-wrap">
+          <img src="kit3.png"
+               alt="Eagles FC Kit 03 – Dark Navy"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--text-gray);">
+            <span style="font-size:4rem;">👕</span>
+            <span style="font-family:var(--font-cond);font-size:0.85rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Kit 03 Preview</span>
+          </div>
+          <div class="kit-hover-overlay">
+            <button class="kit-quick-view" onclick="openKitModal(3)">Quick View</button>
+          </div>
+        </div>
+        <div class="kit-body">
+          <div class="kit-number">Kit 03 · Training</div>
+          <h3 class="kit-name">Dark Navy Wave</h3>
+          <p class="kit-desc">The premium training/third kit in dark navy with wave texture. Leaf pattern on shorts, V-neck collar. Full kit: jersey + shorts.</p>
+          
+         
+          <div class="kit-price-row">
+            <div class="kit-price">
+              <span class="currency">ETB</span>1,500
+            </div>
+            <button class="btn-order" onclick="openOrderModal('Eagles FC Kit 03 – Dark Navy Training Kit','2,100')">🛒 Order</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end kits-grid -->
+
+    <!-- Custom Printing upsell -->
+    <div style="margin-top:40px;background:linear-gradient(135deg,var(--dark-green),var(--off-black));border-radius:var(--radius-lg);padding:32px 40px;border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;" class="reveal">
+      <div>
+        <div class="section-tag" style="margin-bottom:8px;">Custom Printing</div>
+        <h3 style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;text-transform:uppercase;color:var(--white);margin-bottom:6px;">Add Your <span class="text-gold">Name & Number</span></h3>
+        <p style="color:var(--text-gray);font-size:0.9rem;line-height:1.6;max-width:480px;">Want your name and squad number printed on the back? Available for all kits. Add ETB 200 to your order and include your name + number in the notes field when ordering.</p>
+      </div>
+      <div style="text-align:center;flex-shrink:0;">
+        <div style="font-family:var(--font-display);font-size:1rem;font-weight:700;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Custom Printing</div>
+        <div style="font-family:var(--font-display);font-size:2rem;font-weight:700;color:var(--white);">+ ETB 200</div>
+        <div style="font-size:0.78rem;color:var(--text-gray);margin-top:2px;">Per kit, any name/number</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ WHY BUY ══ -->
+<section class="section-pad" style="background:var(--off-black);">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Why Order From Us</div>
+      <h2 class="section-title">Official. <span>Quality. Pride.</span></h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="why-buy-grid">
+      <div class="why-buy-card reveal">
+        <div class="why-buy-icon">🏅</div>
+        <h4>100% Official</h4>
+        <p>Every kit is the official Eagles FC Academy design, manufactured to our exact specifications with quality sublimation printing that lasts.</p>
+      </div>
+      <div class="why-buy-card reveal">
+        <div class="why-buy-icon">⚡</div>
+        <h4>Fast Processing</h4>
+        <p>Orders are processed within 48 hours of confirmed payment. Delivery to Jimma area within 3–5 days. Nationwide shipping available.</p>
+      </div>
+      <div class="why-buy-card reveal">
+        <div class="why-buy-icon">📱</div>
+        <h4>Easy TeleBirr Payment</h4>
+        <p>Pay instantly via TeleBirr — Ethiopia's most trusted mobile payment. Or use bank transfer. No card needed, no complication.</p>
+      </div>
+      <div class="why-buy-card reveal">
+        <div class="why-buy-icon">✏️</div>
+        <h4>Custom Name Printing</h4>
+        <p>Get your name and squad number printed on the back of any kit for just ETB 200 extra. Perfect for players and supporters alike.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SIZE GUIDE ══ -->
+<section class="section-pad" style="background:var(--black);">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Sizing</div>
+      <h2 class="section-title">Size <span>Guide</span></h2>
+      <div class="section-divider"></div>
+      <p class="section-sub">Measure chest circumference. Kits have a regular athletic fit — if between sizes, size up. Youth sizes available on request.</p>
+    </div>
+    <div style="overflow-x:auto;" class="reveal">
+      <table class="size-table">
+        <thead>
+          <tr>
+            <th>Size</th>
+            <th>Chest (cm)</th>
+            <th>Height (cm)</th>
+            <th>Waist (cm)</th>
+            <th>Best For</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>XS</td><td>80 – 86</td><td>155 – 163</td><td>64 – 70</td><td>Youth / Small Adult</td></tr>
+          <tr><td>S</td><td>87 – 92</td><td>163 – 170</td><td>70 – 76</td><td>Lean Adult / U18</td></tr>
+          <tr><td>M</td><td>93 – 100</td><td>170 – 177</td><td>76 – 84</td><td>Average Adult</td></tr>
+          <tr><td>L</td><td>101 – 108</td><td>177 – 183</td><td>84 – 92</td><td>Tall / Broad Adult</td></tr>
+          <tr><td>XL</td><td>109 – 118</td><td>183 – 190</td><td>92 – 102</td><td>Large / Senior Player</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:16px;font-size:0.82rem;color:var(--text-gray);">📞 Need help choosing? Call us: <a href="tel:+251471123456" style="color:var(--gold);">+251 930803396</a> or telegram: <a href="https://tg.me/251930803396" style="color:var(--gold);" target="_blank">+251 911 987 654</a></p>
+  </div>
+</section>
+
+<!-- ══ HOW TO ORDER ══ -->
+<section style="background:var(--off-black);padding:70px 0;">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Ordering Process</div>
+      <h2 class="section-title">How to <span>Order</span></h2>
+      <div class="section-divider"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;">
+      <div style="background:var(--dark-gray);border-radius:var(--radius-lg);padding:28px;border:1px solid rgba(255,255,255,0.05);text-align:center;" class="reveal">
+        <div style="width:50px;height:50px;background:var(--gold);color:var(--black);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.3rem;font-weight:700;margin:0 auto 16px;">1</div>
+        <h4 style="font-family:var(--font-display);font-size:1rem;font-weight:700;text-transform:uppercase;color:var(--white);margin-bottom:8px;">Select Your Kit</h4>
+        <p style="color:var(--text-gray);font-size:0.85rem;line-height:1.65;">Browse the 3 official designs, choose your size, and click the Order button.</p>
+      </div>
+      <div style="background:var(--dark-gray);border-radius:var(--radius-lg);padding:28px;border:1px solid rgba(255,255,255,0.05);text-align:center;" class="reveal">
+        <div style="width:50px;height:50px;background:var(--gold);color:var(--black);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.3rem;font-weight:700;margin:0 auto 16px;">2</div>
+        <h4 style="font-family:var(--font-display);font-size:1rem;font-weight:700;text-transform:uppercase;color:var(--white);margin-bottom:8px;">Fill Your Details</h4>
+        <p style="color:var(--text-gray);font-size:0.85rem;line-height:1.65;">Enter your name, phone, delivery address, and any custom printing requests.</p>
+      </div>
+      <div style="background:var(--dark-gray);border-radius:var(--radius-lg);padding:28px;border:1px solid rgba(255,255,255,0.05);text-align:center;" class="reveal">
+        <div style="width:50px;height:50px;background:var(--gold);color:var(--black);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.3rem;font-weight:700;margin:0 auto 16px;">3</div>
+        <h4 style="font-family:var(--font-display);font-size:1rem;font-weight:700;text-transform:uppercase;color:var(--white);margin-bottom:8px;">Pay via TeleBirr or Bank</h4>
+        <p style="color:var(--text-gray);font-size:0.85rem;line-height:1.65;">Scan the QR code or send to our TeleBirr number. Or use CBE bank transfer.</p>
+      </div>
+      <div style="background:var(--dark-gray);border-radius:var(--radius-lg);padding:28px;border:1px solid rgba(255,255,255,0.05);text-align:center;" class="reveal">
+        <div style="width:50px;height:50px;background:var(--gold);color:var(--black);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.3rem;font-weight:700;margin:0 auto 16px;">4</div>
+        <h4 style="font-family:var(--font-display);font-size:1rem;font-weight:700;text-transform:uppercase;color:var(--white);margin-bottom:8px;">Receive Your Kit</h4>
+        <p style="color:var(--text-gray);font-size:0.85rem;line-height:1.65;">We confirm via phone within 24h and dispatch within 48h. You get your kit!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section style="background:linear-gradient(135deg,var(--dark-green),var(--off-black));padding:70px 0;text-align:center;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1459865264687-595d652de67e?w=1400&q=80') center/cover;opacity:0.07;"></div>
+  <div class="container" style="position:relative;">
+    <div class="section-tag">Questions?</div>
+    <h2 style="font-family:var(--font-display);font-size:clamp(1.8rem,3vw,2.6rem);font-weight:700;text-transform:uppercase;color:var(--white);margin:12px 0 16px;">
+      Need Help With Your <span class="text-gold">Order?</span>
+    </h2>
+    <p style="color:rgba(255,255,255,0.65);max-width:500px;margin:0 auto 32px;line-height:1.75;font-size:1rem;">
+      Call, telegram, or visit us in gelan. Our team will help you choose the right kit and size.
+    </p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+      <a href="https://tg.me/251930803396" target="_blank" class="btn" style="background:#0a15a7;color:#ffffff;border-color:#ffffff;">💬 telegram</a>
+      <a href="contact.html" class="btn btn-outline">📞 Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo-text">🦅 Eagles FC Academy</div>
+        <div class="logo-sub">Ethiopia's Premier Youth Football Academy</div>
+        <p>Developing Ethiopia's football talent since 2015. Based in gelan ethiopia.</p>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/share/1GRrwhnGoj/" class="social-btn">f</a><a href="https://www.instagram.com/eagelsfootball?igsh=OWlmaDh6YmJ3cGRy" class="social-btn">in</a>
+          <a href="https://www.youtube.com/@niser2017" class="social-btn">▶</a><a href="http://tiktok.com/@eagels.fotball.et" class="social-btn">♪</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="programs.html">Programs</a></li>
+        
+          <li><a href="shop.html">Kit Shop</a></li>
+          <li><a href="registration.html">Register</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Kits Available</h4>
+        <ul>
+          <li><a href="shop.html">Kit 01 – Maroon &amp; Gold</a></li>
+          <li><a href="shop.html">Kit 02 – Royal Blue</a></li>
+          <li><a href="shop.html">Kit 03 – Dark Navy</a></li>
+          <li><a href="shop.html">Custom Name Printing</a></li>
+          <li><a href="shop.html">Size Guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact Us</h4>
+        <div class="footer-contact">
+          <div class="contact-item"><span class="icon">📍</span><span>around gelan,  Ethiopia</span></div>
+          <div class="contact-item"><span class="icon">📞</span><span>+251 930803396</span></div>
+          <div class="contact-item"><span class="icon">📧</span><span>info@eaglesfcacademy.et</span></div>
+          <div class="contact-item"><span class="icon">💬</span><span>telegram: +251 930803396</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 <span>Eagles Football Club Academy</span>. All Rights Reserved. 🇪🇹</p>
+      <p>Designed with ❤️ for Ethiopian Football</p>
+    </div>
+  </div>
+</footer>
+<button id="back-to-top" title="Back to top">↑</button>
+
+<!-- ══ KIT DETAIL MODAL ══ -->
+<div id="kit-modal">
+  <div class="modal-box">
+    <button class="modal-close" id="modal-close-btn">✕</button>
+    <div class="modal-img-side">
+      <img  srcset="k"     id="modal-kit-img" src="" alt="Kit Preview">
+    </div>
+    <div class="modal-body-side">
+      <div class="modal-kit-num" id="modal-kit-num"></div>
+      <h2 class="modal-kit-name" id="modal-kit-name"></h2>
+      <p class="modal-kit-desc" id="modal-kit-desc"></p>
+      <div class="modal-price" id="modal-kit-price"></div>
+      <div class="modal-section-label">Select Size</div>
+      <div class="modal-sizes" id="modal-sizes"></div>
+      <div class="modal-section-label">Quantity</div>
+      <div class="modal-qty">
+        <button class="qty-btn" id="qty-minus">−</button>
+        <div class="qty-num" id="qty-display">1</div>
+        <button class="qty-btn" id="qty-plus">+</button>     
+      </div>
+      <button class="btn btn-gold modal-order-btn" id="modal-order-btn">🛒 Order This Kit</button>
+      <div class="modal-features" id="modal-features"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ORDER / PAYMENT MODAL ══ -->
+<div id="order-modal">
+  <div class="order-box">
+    <button class="modal-close" id="order-modal-close">✕</button>
+
+    <!-- Order success screen -->
+    <div class="order-success" id="order-success" style="display:none; background:var(--off-black); position:relative; z-index:10;">
+      <div class="ok-icon">🎉</div>
+      <h3>Order Received!</h3>
+
+      <p>
+        Please complete your Telebirr payment and send the screenshot to Telegram.
+      </p>
+
+      <p>
+        Telegram: <strong>@YJoni</strong>
+      </p>
+
+      <div class="ref" id="order-ref-num"></div>
+
+      <button class="btn btn-gold"
+              style="margin-top:24px;width:100%;justify-content:center;"
+              onclick="closeOrderModal()">
+              Close
+      </button>
+</div>
+
+    <!-- Order form -->
+    <div id="order-form-wrap" style="display:block;">
+      <h2>Place Your Order</h2>
+      <p class="order-sub" id="order-sub-text">Complete the form below and pay via TeleBirr or bank transfer. We will confirm your order by phone within 24 hours.</p>
+
+      <!-- Order summary -->
+      <div class="order-summary">
+        <div class="order-summary-title">🛒 Order Summary</div>
+        <div class="order-summary-row"><span class="lbl">Kit</span><span class="val" id="sum-kit">—</span></div>
+        <div class="order-summary-row"><span class="lbl">Size</span><span class="val" id="sum-size">-</span></div>
+        <div class="order-summary-row"><span class="lbl">Quantity</span><span class="val" id="sum-qty">1</span></div>
+        <div class="order-summary-row"><span class="lbl">Custom Printing</span><span class="val" id="sum-printing">No (+ETB 200 if yes)</span></div>
+        <div class="order-summary-row total"><span class="lbl">Total</span><span class="val" id="sum-total">ETB —</span></div>
+      </div>
+
+      <!-- Payment method tabs -->
+      <div class="pay-tabs">
+        <div class="pay-tab active" onclick="switchPayTab('telebirr',this)">📱 TeleBirr</div>
+        <div class="pay-tab" onclick="switchPayTab('bank',this)">🏦 Bank Transfer</div>
+      </div>
+
+      <!-- TeleBirr panel -->
+      <div class="pay-panel active" id="panel-telebirr">
+        <div class="telebirr-panel">
+          <p style="color:var(--text-gray);font-size:0.85rem;margin-bottom:16px;">Scan the QR code with your TeleBirr app, or send directly to the number below.</p>
+          
+             
+                 <img src="images/qr jo.jpg" style="width:180px;height:180px;"> 
+           
+          </div>
+          <div class="telebirr-phone">📱 +251 930803396</div>
+          <div class="telebirr-name">legese</div>
+          <div class="telebirr-steps">
+            <ol>
+              <li>Open your <strong>TeleBirr app</strong></li>
+              <li>Tap <strong>Scan QR</strong> or <strong>Send Money</strong></li>
+              <li>Enter the amount shown in your order total</li>
+              <li>Reference: <strong>KIT + your phone number</strong></li>
+              <li>Complete payment and screenshot the receipt</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      
+
+     
+
+      <!-- Bank panel -->
+      <div class="pay-panel" id="panel-bank">
+        <div style="background:rgba(0,0,0,0.25);border-radius:var(--radius);padding:20px;margin-bottom:16px;">
+          <div style="font-family:var(--font-cond);font-size:0.75rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;">🏦 Commercial Bank of Ethiopia</div>
+          <div class="bank-row"><span class="b-lbl">Account Name</span><span class="b-val">Eagles FC Academy</span></div>
+          <div class="bank-row"><span class="b-lbl">Account Number</span><span class="b-val">1000 368538454</span></div>
+
+          <div class="bank-row"><span class="b-lbl">Reference</span><span class="b-val">KIT + your phone number</span></div>
+        </div>
+        <div style="background:rgba(0,0,0,0.25);border-radius:var(--radius);padding:20px;">
+          <div style="font-family:var(--font-cond);font-size:0.75rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;">🏦 Bank of hibret (Alternative)</div>
+          <div class="bank-row"><span class="b-lbl">Account Name</span><span class="b-val">Eagles FC Academy</span></div>
+          <div class="bank-row"><span class="b-lbl">Account  Number</span><span class="b-val">4390411541886016</span></div>
+        </div>
+        <p style="margin-top:12px;font-size:0.8rem;color:var(--text-gray);line-height:1.65;">After transferring, fill in the form below. Keep your bank receipt — our team may ask for the reference number to confirm your payment.</p>
+      </div>
+
+      <!-- Buyer Details Form -->
+      <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(201,168,76,0.1);">
+        <div style="font-family:var(--font-cond);font-size:0.75rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">👤 Your Details</div>
+        <form id="order-form" novalidate>
+          <div class="of-row">
+            <div class="of-group">
+              <label for="of-name">Full Name <span>*</span></label>
+              <input type="text" id="of-name" name="name" placeholder="Your full name" required>
+            </div>
+            <div class="of-group">
+              <label for="of-phone">Phone Number <span>*</span></label>
+              <input type="tel" id="of-phone" name="phone" placeholder="+251 9XX XXX XXX" required>
+            </div>
+          </div>
+          <div class="of-group">
+            <label for="of-address">Delivery Address <span>*</span></label>
+            <input type="text" id="of-address" name="address" placeholder="Kebele, District, City — e.g. gelan, ethiopia" required>
+          </div>
+          <div class="of-group">
+            <label for="of-buyer">Buyer Type <span>*</span></label>
+            <select id="of-buyer" name="buyer_type" required>
+              <option value="" disabled selected>Select…</option>
+              <option value="player">Player (for myself)</option>
+              <option value="parent">Parent (buying for my child)</option>
+              <option value="supporter">Supporter / Fan</option>
+              <option value="gift">Buying as a gift</option>
+            </select>
+          </div>
+          <div class="of-group">
+            <label for="of-printing">Custom Name & Number Printing? (+ETB 200)</label>
+            <select id="of-printing" name="printing" onchange="updatePrintingTotal(this.value)">
+              <option value="no">No, plain kit please</option>
+              <option value="yes">Yes — add ETB 200</option>
+            </select>
+          </div>
+          <div class="of-group" id="printing-detail" style="display:none;">
+            <label for="of-printname">Name & Number to Print <span>*</span></label>
+            <input type="text" id="of-printname" name="print_name" placeholder="e.g. ABEBE 9">
+          </div>
+          <div class="of-group">
+            <label for="of-notes">Additional Notes</label>
+            <input type="text" id="of-notes" name="notes" placeholder="Any special requests, exchange contact, etc.">
+          </div>
+          <button type="submit" class="btn btn-gold order-confirm-btn">✅ Confirm Order</button>
+        </form>
+      </div>
+    </div><!-- end order-form-wrap -->
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.js"></script>
+
+<script>
+/* ══════════════════════════════════════════════
+   SUPABASE SETUP
+   የፕሮጀክትህን ንፁህ URL እና Anon Key እዚህ አስተካክለናል!
+══════════════════════════════════════════════ */
+const SUPABASE_URL = 'https://fverizstreoamlcwpljr.supabase.co'; // 👈 እዚህ ላይ /rest/v1/ የሚለው ሙሉ በሙሉ ተወግዷል!
+const SUPABASE_ANON_KEY = 'sb_publishable_yjyIrf1fJBs8HoJYjJRz0w_23E-RTzi'; // 👈 እዚህ ላይ የአንተን ትክክለኛ Anon Key (sb_publishable...) ተካው
+
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+/* ══════════════════════════════════════════════
+   KIT SHOP JAVASCRIPT
+══════════════════════════════════════════════ */
+
+/* Kit data */
+const kits = {
+  1: {
+    num: 'Kit 01 · Home',
+    name: 'Maroon & Gold Eagle',
+    price: '1,500',
+    priceNum: 1500,
+    desc: 'The iconic home kit featuring the Eagles crest in striking maroon and gold tones. Features the iconic eagle silhouette across the chest. Premium quality sublimation print. Full kit includes jersey and shorts.',
+    img: 'kit1.png',
+    features: ['Premium sublimation fabric','Eagle silhouette chest design','V-neck collar','Includes jersey + shorts','Available XS – XL']
+  },
+  2: {
+    num: 'Kit 02 · Away',
+    name: 'Royal Blue Striker',
+    price: '1,500',
+    priceNum: 1500,
+    desc: 'The bold away kit in royal blue with flowing feather patterns on the chest. Breathable moisture-wicking fabric perfect for match days. Full kit includes jersey and shorts.',
+    img: 'kit2.png',
+    features: ['Moisture-wicking fabric','Flowing feather chest design','V-neck collar','Includes jersey + shorts','Available XS – XL']
+  },
+  3: {
+    num: 'Kit 03 · Training',
+    name: 'Dark Navy Wave',
+    price: '1,500',
+    priceNum: 1500,
+    desc: 'The premium training and third kit in deep navy with wave texture patterns. Leaf designs on the shorts. Great for training sessions and casual wear.',
+    img: 'kit3.png',
+    features: ['Wave texture premium fabric','Leaf pattern on shorts','V-neck collar','Includes jersey + shorts','Sizes: S, M, L only']
+  }
+};
+
+let currentKit = null;
+let quantity = 1;
+let orderKitName = '';
+let orderKitPrice = 0;
+
+/* ── Size selection (kit cards) ── */
+function selectSize(btn) {
+  if (btn.classList.contains('sold-out')) return;
+  const parent = btn.closest('.kit-sizes');
+  parent.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* ── Open Kit Modal ── */
+function openKitModal(kitId) {
+  const kit = kits[kitId];
+  currentKit = kit;
+  document.getElementById('modal-kit-num').textContent  = kit.num;
+  document.getElementById('modal-kit-name').textContent = kit.name;
+  document.getElementById('modal-kit-desc').textContent = kit.desc;
+  document.getElementById('modal-kit-price').innerHTML  = '<span style="font-family:var(--font-cond);font-size:0.85rem;color:var(--text-gray);">ETB </span>' + kit.price;
+  document.getElementById('modal-kit-img').src          = kit.img;
+  quantity = 1;
+  document.getElementById('qty-display').textContent = 1;
+
+  /* Sizes */
+  const sizesEl = document.getElementById('modal-sizes');
+  const allSizes = ['XS','S','M','L','XL'];
+  const soldOut = kitId === 3 ? ['XS','XL'] : [];
+  sizesEl.innerHTML = allSizes.map(s =>
+    `<button class="modal-size-btn${s===''?' active':''}${soldOut.includes(s)?' size-btn sold-out':''}"
+      onclick="selectModalSize(this)" ${soldOut.includes(s)?'disabled title="Sold out"':''}>${s}${soldOut.includes(s)?'<br><small style=font-size:.6rem>Out</small>':''}</button>`
+  ).join('');
+
+  /* Features */
+  document.getElementById('modal-features').innerHTML = kit.features.map(f =>
+    `<div class="modal-feat">${f}</div>`).join('');
+
+  /* Order button */
+  document.getElementById('modal-order-btn').onclick = () => {
+    closeKitModal();
+    openOrderModal(kit.num + ' – ' + kit.name, kit.price);
+  };
+
+  document.getElementById('kit-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function selectModalSize(btn) {
+  document.querySelectorAll('.modal-size-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function closeKitModal() {
+  document.getElementById('kit-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modal-close-btn').addEventListener('click', closeKitModal);
+document.getElementById('kit-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('kit-modal')) closeKitModal();
+});
+
+/* Qty controls */
+document.getElementById('qty-plus').addEventListener('click', () => {
+  quantity = Math.min(quantity + 1, 10);
+  document.getElementById('qty-display').textContent = quantity;
+});
+document.getElementById('qty-minus').addEventListener('click', () => {
+  quantity = Math.max(quantity - 1, 1);
+  document.getElementById('qty-display').textContent = quantity;
+});
+
+/* ── Open Order Modal ── */
+function openOrderModal(kitName, kitPrice) {
+  orderKitName  = kitName;
+  orderKitPrice = parseInt(kitPrice.replace(',',''));
+  document.getElementById('sum-kit').textContent   = kitName;
+  document.getElementById('sum-size').textContent  = 'M';
+  document.getElementById('sum-qty').textContent   = quantity + ' kit(s)';
+  document.getElementById('sum-printing').textContent = 'No';
+  document.getElementById('sum-total').textContent = 'ETB ' + (1500 * quantity).toLocaleString();
+  document.getElementById('order-success').style.display = 'none';
+  document.getElementById('order-form-wrap').style.display = 'block';
+  document.getElementById('order-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeOrderModal() {
+  document.getElementById('order-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('order-modal-close').addEventListener('click', closeOrderModal);
+document.getElementById('order-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('order-modal')) closeOrderModal();
+});
+
+/* Payment tabs */
+function switchPayTab(tab, el) {
+  document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-telebirr').classList.remove('active');
+  document.getElementById('panel-bank').classList.remove('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+}
+
+/* Printing toggle */
+function updatePrintingTotal(val) {
+  const printingDetail = document.getElementById('printing-detail');
+  printingDetail.style.display = val === 'yes' ? 'block' : 'none';
+  const extra = val === 'yes' ? 200 : 0;
+  const total = (1500 * quantity) + extra;
+  document.getElementById('sum-printing').textContent = val === 'yes' ? 'Yes (+ETB 200)' : 'No';
+  document.getElementById('sum-total').textContent = 'ETB ' + total.toLocaleString();
+}
+
+/* Order form submit */
+document.getElementById('order-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.querySelector('.order-confirm-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  const required = ['of-name','of-phone','of-address','of-buyer'];
+  let valid = true;
+  required.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) {
+      el.style.borderColor = '#e74c3c';
+      el.style.boxShadow = '0 0 0 3px rgba(231,76,60,0.12)';
+      valid = false;
+      el.addEventListener('input', () => {
+        el.style.borderColor = '';
+        el.style.boxShadow = '';
+      }, {once:true});
+    }
+  });
+
+  if (!valid) {
+    btn.disabled = false;
+    btn.textContent = '✅ Confirm Order';
+    return;
+  }
+
+  const ref = 'EFC-KIT-' + Date.now().toString().slice(-6) + Math.floor(Math.random() * 900 + 100);
+
+  const order = {
+    ref,
+    kit: orderKitName,
+    name: document.getElementById('of-name').value,
+    phone: document.getElementById('of-phone').value,
+    address: document.getElementById('of-address').value,
+    buyer: document.getElementById('of-buyer').value,
+    printing: document.getElementById('of-printing').value,
+    print_name: document.getElementById('of-printname').value,
+    total: document.getElementById('sum-total').textContent
+  };
+
+  const { data, error } = await supabase.from('orders').insert([order]);
+
+  if (error) {
+    console.error(error);
+    btn.disabled = false;
+    btn.textContent = '✅ Confirm Order';
+    alert('Failed to save order');
+    return;
+  }
+
+  // ✅ SUCCESS
+  const formWrap = document.getElementById('order-form-wrap');
+  const successDiv = document.getElementById('order-success');
+
+  formWrap.style.cssText = 'display:none !important';
+  document.getElementById('order-ref-num').innerHTML = '<strong>Reference:</strong> ' + ref;
+  successDiv.style.cssText = 'display:block !important; text-align:center; padding:24px 0;';
+  document.getElementById('order-form').reset();
+  btn.disabled = false;
+  btn.textContent = '✅ Confirm Order';
+});
+
+/* Keyboard close */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeKitModal(); closeOrderModal(); }
+});
+</script>
+</body>
+</html>
+

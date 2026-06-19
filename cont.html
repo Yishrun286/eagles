@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | Eagles FC Academy Ethiopia</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦅</text></svg>">
+  <style>
+    /* ══════════════════════════════
+       CONTACT PAGE – SCOPED STYLES
+    ══════════════════════════════ */
+    .contact-page-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.35fr;
+      gap: 40px;
+      align-items: start;
+    }
+    @media (max-width: 900px) { .contact-page-grid { grid-template-columns: 1fr; } }
+
+    /* Card — same feel as coach-card / prog-card-full */
+    .cp-card {
+      background: var(--off-black);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      transition: var(--transition);
+    }
+    .cp-card:hover { border-color: rgba(201,168,76,0.28); }
+    .cp-card + .cp-card { margin-top: 20px; }
+    .cp-card-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(201,168,76,0.1);
+    }
+
+    /* Detail rows */
+    .cp-detail { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 22px; }
+    .cp-detail:last-of-type { margin-bottom: 0; }
+    .cp-detail-icon {
+      width: 48px; height: 48px; min-width: 48px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem;
+    }
+    .cp-detail-body h4 {
+      font-family: var(--font-cond);
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.2em;
+      color: var(--gold); margin-bottom: 5px;
+    }
+    .cp-detail-body p, .cp-detail-body a {
+      color: var(--text-gray); font-size: 0.92rem;
+      line-height: 1.65; margin: 0; transition: var(--transition);
+    }
+    .cp-detail-body a:hover { color: var(--gold); }
+
+    .cp-divider { border: none; border-top: 1px solid rgba(201,168,76,0.1); margin: 24px 0; }
+
+    /* Social buttons */
+    .cp-social-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+    .cp-social-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      color: var(--text-gray);
+      font-family: var(--font-cond); font-size: 0.82rem;
+      font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      transition: var(--transition); text-decoration: none;
+    }
+    .cp-social-btn:hover { background: var(--gold); border-color: var(--gold); color: var(--black); transform: translateY(-2px); }
+
+    /* WhatsApp */
+    .cp-whatsapp {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 14px;
+      background: #25D366; border: none; border-radius: var(--radius);
+      color: #fff; font-family: var(--font-cond); font-size: 1rem;
+      font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none; transition: var(--transition);
+    }
+    .cp-whatsapp:hover { background: #1db954; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,211,102,0.35); color:#fff; }
+
+    /* Map placeholder */
+    .cp-map {
+      margin-top: 20px; height: 185px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(201,168,76,0.15);
+      background: linear-gradient(135deg, var(--dark-green), var(--off-black));
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; gap: 8px; overflow: hidden;
+    }
+    .cp-map-pin  { font-size: 2.2rem; }
+    .cp-map p    { color: var(--text-gray); font-size: 0.82rem; margin: 0; }
+    .cp-map a {
+      font-family: var(--font-cond); font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gold); text-decoration: none;
+      border-bottom: 1px solid currentColor; padding-bottom: 1px;
+      transition: var(--transition);
+    }
+    .cp-map a:hover { color: var(--gold-light); }
+
+    /* Hours */
+    .cp-hours-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .cp-hours-row:last-child { border-bottom: none; }
+    .cp-hours-day    { color: var(--text-gray); font-size: 0.88rem; }
+    .cp-hours-time   { color: var(--gold); font-family: var(--font-cond); font-size: 0.88rem; font-weight: 700; }
+    .cp-hours-closed { color: rgba(160,176,160,0.3); font-size: 0.88rem; font-style: italic; }
+
+    /* Form card — full-width, no fixed px width */
+    .cp-form-card {
+      background: var(--off-black);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      width: 100%;
+      box-sizing: border-box;
+      transition: var(--transition);
+    }
+    .cp-form-card:hover { border-color: rgba(201,168,76,0.28); }
+    .cp-form-title {
+      font-family: var(--font-display); font-size: 1.3rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.05em; color: var(--white); margin-bottom: 6px;
+    }
+    .cp-form-sub {
+      color: var(--text-gray); font-size: 0.88rem; line-height: 1.7;
+      margin-bottom: 28px; padding-bottom: 20px;
+      border-bottom: 1px solid rgba(201,168,76,0.1);
+    }
+
+    /* Fields — same tokens as registration page */
+    .cp-group { margin-bottom: 18px; }
+    .cp-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 520px) { .cp-row { grid-template-columns: 1fr; } }
+    .cp-group label {
+      display: block; font-family: var(--font-cond); font-size: 0.72rem;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em;
+      color: var(--text-gray); margin-bottom: 7px;
+    }
+    .cp-group label span { color: var(--gold); }
+    .cp-group input,
+    .cp-group select,
+    .cp-group textarea {
+      width: 100%; background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      padding: 13px 15px; color: var(--white);
+      font-size: 0.9rem; font-family: var(--font-body);
+      transition: var(--transition); outline: none; box-sizing: border-box;
+    }
+    .cp-group select option { background: #0a2e0a; color: var(--white); }
+    .cp-group input:focus,
+    .cp-group select:focus,
+    .cp-group textarea:focus {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.05);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+    }
+    .cp-group input::placeholder,
+    .cp-group textarea::placeholder { color: rgba(255,255,255,0.2); }
+    .cp-group textarea { resize: vertical; min-height: 130px; }
+    .cp-submit { width: 100%; justify-content: center; padding: 15px; font-size: 1rem; margin-top: 4px; }
+
+    /* Success banner */
+    .cp-success {
+      display: none;
+      background: rgba(46,139,46,0.1); border: 1px solid rgba(46,139,46,0.3);
+      border-radius: var(--radius); padding: 14px 18px; text-align: center;
+      color: #6ddb6d; font-family: var(--font-cond); font-size: 0.92rem;
+      font-weight: 700; letter-spacing: 0.05em; margin-top: 16px;
+    }
+
+    /* Quick-contact links */
+    .cp-quick-link {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius); color: var(--white);
+      font-size: 0.9rem; text-decoration: none; transition: var(--transition);
+    }
+    .cp-quick-link:hover { border-color: var(--gold); background: rgba(201,168,76,0.05); }
+    .cp-quick-link.wa:hover { border-color: #25D366; background: rgba(37,211,102,0.06); }
+    .cp-quick-link strong { color: var(--gold); }
+    .cp-quick-link.wa strong { color: #25D366; }
+
+    /* FAQ cards */
+    .faq-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(270px,1fr)); gap: 20px; }
+    .faq-card {
+      background: var(--dark-gray); border-radius: var(--radius);
+      padding: 24px; border: 1px solid rgba(255,255,255,0.05); transition: var(--transition);
+    }
+    .faq-card:hover { border-color: rgba(201,168,76,0.25); transform: translateY(-3px); }
+    .faq-card h4 { font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+    .faq-card p  { color: var(--text-gray); font-size: 0.88rem; line-height: 1.75; margin: 0; }
+    .faq-card a  { color: var(--gold); transition: var(--transition); }
+    .faq-card a:hover { color: var(--gold-light); }
+
+    @media (max-width: 480px) { .cp-card, .cp-form-card { padding: 22px 16px; } }
+  </style>
+</head>
+<body>
+
+<!-- ══ LOADING SCREEN ══ -->
+<div id="loading-screen">
+  <div class="loader-logo">🦅 EAGLES FC</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+</div>
+
+<!-- ══ NAVBAR ══ -->
+<nav id="navbar" class="scrolled">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">🦅</div>
+        <div class="nav-logo-text">
+          <div class="main">Eagles FC</div>
+          <div class="sub">Football Academy</div>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="programs.html">Programs</a>
+        <a href="coaches.html">Coaches</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="contact.html" class="active">Contact</a>
+        <a href="donation.html" class="nav-cta">Donate</a>
+      </div>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobile-nav">
+  <a href="index.html">🏠 Home</a>
+  <a href="about.html">📖 About Us</a>
+  <a href="programs.html">⚽ Programs</a>
+  <a href="coaches.html">👨‍🏫 Coaches</a>
+  <a href="gallery.html">📷 Gallery</a>
+  <a href="registration.html">📝 Register</a>
+  <a href="donation.html">💛 Donate</a>
+  <a href="contact.html">📞 Contact</a>
+</div>
+
+<!-- ══ PAGE HERO ══ -->
+<section class="page-hero">
+  <div class="page-hero-content container">
+    <div class="page-hero-tag">📞 Get In Touch</div>
+    <h1>Contact <span>Us</span></h1>
+    <div class="breadcrumb">
+      <a href="index.html">Home</a> <span>›</span> <span>Contact</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT SECTION ══ -->
+<section class="section-pad" style="background:var(--black);">
+  <div class="container">
+
+    <div class="section-header">
+      <div class="section-tag">Let's Talk</div>
+      <h2 class="section-title">We'd Love to <span>Hear From You</span></h2>
+      <div class="section-divider"></div>
+      <p class="section-sub">Whether you're a player, parent, coach, or sponsor — our team is always here to help.</p>
+    </div>
+
+    <div class="contact-page-grid">
+
+      <!-- ── LEFT: Info ── -->
+      <div>
+
+        <div class="cp-card reveal-left">
+          <h3 class="cp-card-title">Reach Us Directly</h3>
+
+          <div class="cp-detail">
+            <div class="cp-detail-icon">📍</div>
+            <div class="cp-detail-body">
+              <h4>Our Location</h4>
+              <p>Jimma Stadium Road<br>Jimma, Oromia Region<br>Ethiopia 🇪🇹</p>
+            </div>
+          </div>
+
+          <div class="cp-detail">
+            <div class="cp-detail-icon">📞</div>
+            <div class="cp-detail-body">
+              <h4>Phone Numbers</h4>
+              <p>
+                <a href="tel:+251471123456">+251 471 123 456</a> — Office<br>
+                <a href="tel:+251911987654">+251 911 987 654</a> — Mobile
+              </p>
+            </div>
+          </div>
+
+          <div class="cp-detail">
+            <div class="cp-detail-icon">📧</div>
+            <div class="cp-detail-body">
+              <h4>Email Addresses</h4>
+              <p>
+                <a href="mailto:info@eaglesfcacademy.et">info@eaglesfcacademy.et</a><br>
+                <a href="mailto:registration@eaglesfcacademy.et">registration@eaglesfcacademy.et</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="cp-detail">
+            <div class="cp-detail-icon">⏰</div>
+            <div class="cp-detail-body">
+              <h4>Office Hours</h4>
+              <p>Mon – Fri: 8:00 AM – 6:00 PM<br>Saturday: 9:00 AM – 4:00 PM<br>Sunday: Closed</p>
+            </div>
+          </div>
+
+          <div class="cp-divider"></div>
+
+          <h3 class="cp-card-title" style="font-size:1rem;margin-bottom:16px;padding-bottom:0;border:none;">Follow Us</h3>
+          <div class="cp-social-row">
+            <a href="#" class="cp-social-btn">f Facebook</a>
+            <a href="#" class="cp-social-btn">📸 Instagram</a>
+            <a href="#" class="cp-social-btn">▶ YouTube</a>
+            <a href="#" class="cp-social-btn">♪ TikTok</a>
+            <a href="#" class="cp-social-btn">✕ Twitter</a>
+          </div>
+
+          <!-- WhatsApp button -->
+          <a href="https://wa.me/251911987654?text=Hello%20Eagles%20FC%20Academy!%20I%20would%20like%20to%20enquire%20about%20your%20programs."
+             target="_blank" rel="noopener" class="cp-whatsapp">
+            <span style="font-size:1.3rem;">💬</span>
+            Chat on WhatsApp
+          </a>
+
+          <!-- Map -->
+          <div class="cp-map">
+            <div class="cp-map-pin">🗺️</div>
+            <p>Jimma Stadium Road, Jimma, Ethiopia</p>
+            <a href="https://maps.google.com/?q=Jimma+Stadium,+Jimma,+Ethiopia" target="_blank" rel="noopener">Open in Google Maps →</a>
+          </div>
+        </div>
+
+        <!-- Office Hours card -->
+        <div class="cp-card reveal-left">
+          <h3 class="cp-card-title">Office Hours</h3>
+          <div class="cp-hours-row"><span class="cp-hours-day">Monday</span><span class="cp-hours-time">8:00 AM – 6:00 PM</span></div>
+          <div class="cp-hours-row"><span class="cp-hours-day">Tuesday</span><span class="cp-hours-time">8:00 AM – 6:00 PM</span></div>
+          <div class="cp-hours-row"><span class="cp-hours-day">Wednesday</span><span class="cp-hours-time">8:00 AM – 6:00 PM</span></div>
+          <div class="cp-hours-row"><span class="cp-hours-day">Thursday</span><span class="cp-hours-time">8:00 AM – 6:00 PM</span></div>
+          <div class="cp-hours-row"><span class="cp-hours-day">Friday</span><span class="cp-hours-time">8:00 AM – 6:00 PM</span></div>
+          <div class="cp-hours-row"><span class="cp-hours-day">Saturday</span><span class="cp-hours-time">9:00 AM – 4:00 PM</span></div>
+          <div class="cp-hours-row"><span class="cp-hours-day">Sunday</span><span class="cp-hours-closed">Closed</span></div>
+          <p style="margin-top:16px;font-size:0.8rem;color:rgba(160,176,160,0.35);line-height:1.7;">
+            Training sessions run Mon–Sat from early morning. Walk-ins welcome for free trial sessions. Please call ahead to confirm today's schedule.
+          </p>
+        </div>
+
+      </div><!-- end left column -->
+
+      <!-- ── RIGHT: Form ── -->
+      <div class="cp-form-card reveal-right">
+
+        <h3 class="cp-form-title">Send Us a Message</h3>
+        <p class="cp-form-sub">
+          Have a question about registration, programs, coaching positions, or sponsorship?
+          Fill in the form and our team will reply within 24 hours.
+        </p>
+
+        <form id="contact-form" novalidate>
+
+          <div class="cp-row">
+            <div class="cp-group">
+              <label for="cf-first">First Name <span>*</span></label>
+              <input type="text" id="cf-first" name="first_name" placeholder="e.g. Abel" required>
+            </div>
+            <div class="cp-group">
+              <label for="cf-last">Last Name <span>*</span></label>
+              <input type="text" id="cf-last" name="last_name" placeholder="e.g. Kebede" required>
+            </div>
+          </div>
+
+          <div class="cp-group">
+            <label for="cf-email">Email Address <span>*</span></label>
+            <input type="email" id="cf-email" name="email" placeholder="you@example.com" required>
+          </div>
+
+          <div class="cp-group">
+            <label for="cf-phone">Phone Number</label>
+            <input type="tel" id="cf-phone" name="phone" placeholder="+251 9XX XXX XXX">
+          </div>
+
+          <div class="cp-group">
+            <label for="cf-subject">Subject <span>*</span></label>
+            <select id="cf-subject" name="subject" required>
+              <option value="" disabled selected>Select a topic…</option>
+              <option value="registration">Player Registration</option>
+              <option value="programs">Programs &amp; Training Info</option>
+              <option value="trial">Book a Free Trial Session</option>
+              <option value="donation">Donation / Sponsorship</option>
+              <option value="partnership">Club Partnership</option>
+              <option value="coaching">Coaching / Staff Position</option>
+              <option value="media">Media &amp; Press</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="cp-group">
+            <label for="cf-message">Your Message <span>*</span></label>
+            <textarea id="cf-message" name="message"
+              placeholder="Tell us how we can help — the more detail the better!" required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-gold cp-submit">📨 Send Message</button>
+          <div class="cp-success" id="form-success">✅ Message sent! We'll be in touch within 24 hours. Thank you!</div>
+
+        </form>
+
+        <div class="cp-divider" style="margin-top:28px;"></div>
+        <p style="font-family:var(--font-cond);font-size:0.75rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-gray);margin-bottom:14px;">Or reach us directly</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <a href="tel:+251471123456" class="cp-quick-link">
+            <span style="font-size:1.2rem;">📞</span>
+            Call us: <strong>+251 471 123 456</strong>
+          </a>
+          <a href="mailto:info@eaglesfcacademy.et" class="cp-quick-link">
+            <span style="font-size:1.2rem;">📧</span>
+            Email: <strong>info@eaglesfcacademy.et</strong>
+          </a>
+          <a href="https://wa.me/251911987654" target="_blank" rel="noopener" class="cp-quick-link wa">
+            <span style="font-size:1.2rem;">💬</span>
+            WhatsApp: <strong>+251 911 987 654</strong>
+          </a>
+        </div>
+
+      </div><!-- end right column -->
+    </div><!-- end grid -->
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section class="section-pad" style="background:var(--off-black);">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">FAQ</div>
+      <h2 class="section-title">Common <span>Questions</span></h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-card reveal">
+        <h4>How do I register?</h4>
+        <p>Visit our <a href="registration.html">Registration page</a>, fill in the online form, and our team will contact you within 3 business days to schedule your free trial.</p>
+      </div>
+      <div class="faq-card reveal">
+        <h4>Are trials free?</h4>
+        <p>Yes — 100% free of charge. We believe every talented young Ethiopian deserves the chance to be seen, regardless of financial background.</p>
+      </div>
+      <div class="faq-card reveal">
+        <h4>What age groups do you accept?</h4>
+        <p>Ages 7 through to Senior level (18+). See our <a href="programs.html">Programs page</a> for full details on every age group and schedule.</p>
+      </div>
+      <div class="faq-card reveal">
+        <h4>How can I support the academy?</h4>
+        <p>Donate via TeleBirr or bank transfer on our <a href="donation.html">Donation page</a>, or contact us to discuss corporate sponsorship packages.</p>
+      </div>
+      <div class="faq-card reveal">
+        <h4>Do you accept female players?</h4>
+        <p>Yes! Eagles FC Academy welcomes female players across all age groups. We are fully committed to growing women's football in Ethiopia.</p>
+      </div>
+      <div class="faq-card reveal">
+        <h4>Can I visit the academy?</h4>
+        <p>Absolutely. Walk-ins welcome Mon–Sat. Call <a href="tel:+251471123456">+251 471 123 456</a> ahead so we can give you a full tour and introduce our coaches.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA BANNER ══ -->
+<section style="background:linear-gradient(135deg,var(--dark-green),var(--off-black));padding:70px 0;text-align:center;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=1400&q=80') center/cover;opacity:0.06;"></div>
+  <div class="container" style="position:relative;">
+    <div class="section-tag">Ready to Start?</div>
+    <h2 style="font-family:var(--font-display);font-size:clamp(1.8rem,3vw,2.8rem);font-weight:700;text-transform:uppercase;color:var(--white);margin:12px 0 16px;">
+      Join the <span class="text-gold">Eagles Family</span>
+    </h2>
+    <p style="color:rgba(255,255,255,0.65);max-width:500px;margin:0 auto 32px;line-height:1.75;font-size:1rem;">
+      Don't wait — register today for a free trial session and take the first step toward your football dream.
+    </p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+      <a href="registration.html" class="btn btn-gold">📝 Register Now</a>
+      <a href="donation.html" class="btn btn-outline">💛 Donate</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo-text">🦅 Eagles FC Academy</div>
+        <div class="logo-sub">Ethiopia's Premier Youth Football Academy</div>
+        <p>Developing Ethiopia's football talent since 2012. Based in Jimma, Oromia Region.</p>
+        <div class="footer-social">
+          <a href="#" class="social-btn" title="Facebook">f</a>
+          <a href="#" class="social-btn" title="Instagram">in</a>
+          <a href="#" class="social-btn" title="YouTube">▶</a>
+          <a href="#" class="social-btn" title="TikTok">♪</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="programs.html">Programs</a></li>
+          <li><a href="coaches.html">Coaches</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="registration.html">Register</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Programs</h4>
+        <ul>
+          <li><a href="programs.html">Under 10</a></li>
+          <li><a href="programs.html">Under 15</a></li>
+          <li><a href="programs.html">Under 18 Elite</a></li>
+          <li><a href="programs.html">Senior Team</a></li>
+          <li><a href="programs.html">Goalkeeper Training</a></li>
+          <li><a href="programs.html">Fitness Camp</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact Us</h4>
+        <div class="footer-contact">
+          <div class="contact-item"><span class="icon">📍</span><span>Jimma Stadium Road, Jimma, Ethiopia</span></div>
+          <div class="contact-item"><span class="icon">📞</span><span>+251 471 123 456</span></div>
+          <div class="contact-item"><span class="icon">📧</span><span>info@eaglesfcacademy.et</span></div>
+          <div class="contact-item"><span class="icon">💬</span><span>WhatsApp: +251 911 987 654</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 <span>Eagles Football Club Academy</span>. All Rights Reserved. 🇪🇹</p>
+      <p>Designed with ❤️ for Ethiopian Football</p>
+    </div>
+  </div>
+</footer>
+
+<button id="back-to-top" title="Back to top">↑</button>
+
+<script src="js/script.js"></script>
+<script>
+  (function () {
+    const form    = document.getElementById('contact-form');
+    const success = document.getElementById('form-success');
+    if (!form) return;
+
+    function markField(el, bad) {
+      el.style.borderColor = bad ? '#e74c3c' : '';
+      el.style.boxShadow   = bad ? '0 0 0 3px rgba(231,76,60,0.12)' : '';
+    }
+    form.querySelectorAll('input, select, textarea').forEach(el => {
+      el.addEventListener('input',  () => markField(el, false));
+      el.addEventListener('change', () => markField(el, false));
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const required = ['cf-first','cf-last','cf-email','cf-subject','cf-message'];
+      let valid = true;
+      required.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el || !el.value.trim()) { markField(el, true); valid = false; }
+      });
+      const emailEl = document.getElementById('cf-email');
+      if (emailEl && emailEl.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
+        markField(emailEl, true); valid = false;
+      }
+      if (!valid) return;
+
+      const btn = form.querySelector('button[type="submit"]');
+      btn.textContent = '⏳ Sending…';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        success.style.display = 'block';
+        btn.textContent = '✅ Sent!';
+        form.reset();
+        setTimeout(() => {
+          success.style.display = 'none';
+          btn.textContent = '📨 Send Message';
+          btn.disabled = false;
+        }, 5000);
+      }, 1200);
+    });
+  })();
+</script>
+</body>
+</html>
